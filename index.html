@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>MusicHub Entertainment</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, 'Segoe UI', 'Arial', sans-serif;
+    }
+
+    body {
+      background: #0b1120;
+      color: #f1f5f9;
+      scroll-behavior: smooth;
+    }
+
+    /* Header */
+    header {
+      background: rgba(17, 24, 39, 0.92);
+      backdrop-filter: blur(12px);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #38bdf8, #818cf8);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      letter-spacing: -0.5px;
+    }
+
+    .search-box input {
+      padding: 0.75rem 1.2rem;
+      width: 280px;
+      border: none;
+      border-radius: 60px;
+      background: #1e293b;
+      color: white;
+      font-size: 0.95rem;
+      outline: none;
+      transition: 0.25s;
+      border: 1px solid #334155;
+    }
+
+    .search-box input:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.3);
+      background: #0f172a;
+    }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 3rem 1.5rem;
+      background: linear-gradient(145deg, #0f172a, #0b1120);
+      border-bottom: 1px solid #1e293b;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      background: linear-gradient(135deg, #e0f2fe, #38bdf8);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      margin-bottom: 0.75rem;
+    }
+
+    .hero p {
+      color: #94a3b8;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Main container */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1.8rem;
+      letter-spacing: -0.3px;
+      border-left: 5px solid #38bdf8;
+      padding-left: 1rem;
+    }
+
+    /* Music grid - clean & responsive */
+    .music-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    /* CARD design */
+    .music-card {
+      background: #111827;
+      border-radius: 1.5rem;
+      overflow: hidden;
+      transition: all 0.25s ease-in-out;
+      box-shadow: 0 12px 24px -12px rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #1f2a3e;
+    }
+
+    .music-card:hover {
+      transform: translateY(-5px);
+      border-color: #38bdf8;
+      box-shadow: 0 20px 30px -12px rgba(56, 189, 248, 0.2);
+    }
+
+    .music-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+      background: #0f172a;
+      transition: transform 0.4s;
+    }
+
+    .music-card:hover img {
+      transform: scale(1.02);
+    }
+
+    .music-info {
+      padding: 1.2rem 1.2rem 1.3rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .music-info h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 0.5rem;
+      color: #facc15;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .artist {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      margin-bottom: 1.2rem;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    audio {
+      width: 100%;
+      margin: 0.5rem 0 1rem 0;
+      border-radius: 40px;
+      height: 40px;
+    }
+
+    .video-player {
+       width: 100%;
+       height: 420px;
+       object-fit: cover;
+       background: #000;
+       display: block;
+       border-radius: 0;
+    }
+    audio::-webkit-media-controls-panel {
+      background-color: white;
+    }
+
+    .play-btn {
+      background: #38bdf8;
+      border: none;
+      padding: 10px 0;
+      font-weight: 600;
+      border-radius: 40px;
+      color: #0f172a;
+      cursor: pointer;
+      transition: 0.2s;
+      margin-top: 0.5rem;
+      width: 100%;
+      text-align: center;
+      font-size: 0.9rem;
+      letter-spacing: 0.3px;
+    }
+
+    .play-btn:hover {
+      background: #0ea5e9;
+      transform: scale(0.98);
+      color: white;
+    }
+
+    /* Pagination container */
+    .pagination-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      margin: 2rem 0 1rem;
+      flex-wrap: wrap;
+    }
+
+    .pagination-btn {
+      background: #1e293b;
+      color: #e2e8f0;
+      border: none;
+      padding: 0.6rem 1.4rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pagination-btn:not(:disabled):hover {
+      background: #38bdf8;
+      color: #0f172a;
+      transform: translateY(-2px);
+    }
+
+    .pagination-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .page-info {
+      background: #0f172a;
+      padding: 0.5rem 1.2rem;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      border: 1px solid #334155;
+    }
+
+    .no-result {
+      text-align: center;
+      font-size: 1.2rem;
+      padding: 3rem;
+      background: #111827;
+      border-radius: 2rem;
+      color: #94a3b8;
+      grid-column: 1 / -1;
+    }
+
+    footer {
+      background: #030712;
+      text-align: center;
+      padding: 1.5rem;
+      color: #f1f5f9;
+      margin-top: 2rem;
+      font-size: 0.85rem;
+      border-top: 1px solid #1e293b;
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        padding: 1.5rem;
+      }
+      .hero h1 {
+        font-size: 2rem;
+      }
+      .search-box input {
+        width: 100%;
+      }
+      header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .music-grid {
+        gap: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">🎧 MusicHub · WaveGrid</div>
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search by song or artist...">
+  </div>
+</header>
+
+<section class="container">
+  <h2 class="section-title">✨ Popular Songs</h2>
+  <div id="musicGrid" class="music-grid">
+    <!-- dynamic cards will be injected here -->
+  </div>
+
+  <!-- Pagination controls (visible only when needed) -->
+  <div id="paginationControls" class="pagination-wrap" style="display: none;">
+    <button id="prevPageBtn" class="pagination-btn">◀ Prev</button>
+    <span id="pageIndicator" class="page-info">Page 1 / 1</span>
+    <button id="nextPageBtn" class="pagination-btn">Next ▶</button>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 MusicHub | Montie Carmon</p>
+</footer>
+
+<script>
+  // ---------- SONG DATABASE ----------
+const songsDatabase = [
+  {
+    id: 1,
+    title: "2023 URBANIZED PARTY MIX",
+    artist: "DJ BYRON WORLDWIDE ft. Sia, J. Bieber, J. Derulo, Ed Sheeran",
+    image: "images/urban.jpg",
+    audioSrc: "https://bxuxlwxxmdsywzykwzov.supabase.co/storage/v1/object/public/music/Top_Hits_2020_Video_Mix__CLEAN____Hip_Hop_2020_-__POP_HITS_2020,_TOP_40_HITS,_BEST_POP_HITS,TOP_40_(128k).m4a",
+    audioType: "audio/mpeg"
+  },
+
+  {
+    id: 2,
+    title: "DJ F2 · Urban RNB Mix",
+    artist: "DJ F2 ft. Justin Bieber, Khalid, Anne Marie, Chris Brown, Cardi B",
+    image: "images/djf2.jpg",
+    audioSrc: "music/DJ-F2-URBAN-RNB-POP-KIZOMBA-VIDE.mp3",
+    audioType: "audio/mpeg"
+  },
+
+  {
+    id: 3,
+    title: "BEST OF VYBZ KARTEL & KONSHENS",
+    artist: "Vybz Kartel, Konshens, Spice · Dancehall Energy",
+    image: "images/vybz.jpg",
+    audioSrc: "music/Best-Of-Vybz-Kartel-Mix-Dj-Trez.mp3",
+    audioType: "audio/mpeg"
+  },
+
+  {
+    id: 4,
+    title: "URBAN TRAP · HIPHOP ENERGY",
+    artist: "Migos, Drake, Gunna, J. Cole · Best Mix",
+    image: "images/trap.jpg",
+    audioSrc: "music/DJ-KALONJE-BEST-TRAP-HIP-HOP-VID.mp3",
+    audioType: "audio/mpeg"
+  },
+
+  {
+    id: 5,
+    title: "MOST PLAYED URBAN POP",
+    artist: "French Montana, Swae Lee, Sean Paul, Major Lazer",
+    image: "images/most.jpg",
+    audioSrc: "music/MOST-PLAYED-2015-2021-URBAN-POP.mp3",
+    audioType: "audio/mpeg"
+  },
+
+  {
+    id: 6,
+    title: "3-STEP MIX · AMAPIANO WAVE",
+    artist: "Jazzworld · Afro Tech, Bengicela, Mali, Isaka",
+    image: "images/step.jpg",
+    audioSrc: "music/3-Step-Afro-Tech-Mix-Bengicela-T.mp3",
+    audioType: "audio/mpeg"
+  },
+
+  {
+    id: 7,
+    title: "LATEST DANCEHALL MIX",
+    artist: "Moliy, Vybz Kartel, Shenseea",
+    image: "images/moliy.jpg",
+    audioSrc: "music/LATEST-DANCEHALL-RIDDIMS-VIDEO-M.mp3",
+    audioType: "audio/mpeg"
+  },
+
+  {
+    id: 8,
+    title: "DAGGERING MIX",
+    artist: "Vybz Kartel, Konshens, Demarco",
+    image: "images/daggering.jpg",
+    audioSrc: "music/DAGGERING-MIX-SHAKE-IT-TO-THE-MA.mp3",
+    audioType: "audio/mpeg"
+  },
+
+  {
+    id: 9,
+    title: "BEST CLUB BANGERS MIX 2025 DJ CARLOS",
+    artist: "Toxic Lyrikali, Vybz Kartel, Konshens, Demarco",
+    image: "images/toxic.jpg",
+    audioSrc: "music/BEST-CLUB-BANGERS-2025-VIDEO-MIX.mp3",
+    audioType: "audio/mpeg"
+  },
+
+  {
+    id: 10,
+    title: "TRAP HIPHOP DJ SETRIN",
+    artist: "Drake, Migos, Cardi B",
+    image: "images/trap1.jpg",
+    audioSrc: "music/TRAP-HIPHOP-OFFICIAL-VIDEO-MIX-V.mp3",
+    audioType: "audio/mpeg"
+  },
+
+  {
+    id: 11,
+    title: "FRESHKID FT MC MIDOO",
+    artist: "Best Kenyan hits and latest hits",
+    image: "images/mido.jpg",
+    audioSrc: "music/FRESHKID-VENOM-ft-MC-MIDO-LIVE-C.mp3",
+    audioType: "audio/mpeg"
+  },
+
+  {
+    id: 12,
+    title: "THE WAKE UP CALL GRAUCHI 180 BamBam",
+    artist: "180 BamBam",
+    image: "images/grauchi.jpg",
+    audioSrc: "music/The-Wake-Up-Call-With-Grauchi-18.mp3",
+    audioType: "audio/mpeg"
+  },
+
+  {
+    id: 13,
+    title: "GO-PATO REGGAE MIX",
+    artist: "Go Pato Moonlight",
+    image: "images/gopato.jpg",
+    audioSrc: "music/GO-PATO-REGGAE-VIDEO-MIX-2022-NE.mp3",
+    audioType: "audio/mpeg"
+  },
+
+  {
+    id: 14,
+    title: "DJ 38K CHRISTINA SHUSHO MIX",
+    artist: "Christina Shusho",
+    image: "images/shusho.jpg",
+    audioSrc: "music/DJ-38K-CHRISTINA-SHUSHO-VIDEO-MI.mp3",
+    audioType: "audio/mpeg"
+  },
+
+  {
+    id: 15,
+    title: "BEST OF ALAN WALKER MIX",
+    artist: "Alan Walker",
+    image: "images/allan.jpg",
+    audioSrc: "music/BEST-OF-ALAN-WALKER-2023-aLaN-Wa.mp3",
+    audioType: "audio/mpeg"
+  },
+
+  {
+    id: 16,
+    title: "GOSPEL MIX HITS KASHTRAXX",
+    artist: "Wapenda Muziki",
+    image: "images/gospel.jpg",
+    audioSrc: "music/GOSPEL-BEST-HITS-2026-DJ-KASHTRA.mp3",
+    audioType: "audio/mpeg"
+  },
+
+  {
+    id: 17,
+    title: "DJ TREVIS NGANYA MIX",
+    artist: "Nganya hits",
+    image: "images/nganya1.jpg",
+    audioSrc: "music/DJ-TREVIS-MIX005-2026-NEW-NGANYA.mp3",
+    audioType: "audio/mpeg"
+  },
+
+  {
+    id: 18,
+    title: "NEW BONGO MIX",
+    artist: "New Bongo hits",
+    image: "images/bongo1.jpg",
+    audioSrc: "music/NEW-BONGO-MIX-2025-FT-NEW-BONGO.mp3",
+    audioType: "audio/mpeg"
+  },
+
+  {
+    id: 19,
+    title: "THROWBACK DANCEHALL RIDDIMS MIX",
+    artist: "Throwback Riddims",
+    image: "images/dancehall.jpg",
+    audioSrc: "music/THROWBACK-DANCEHALL-RIDDIMS-Ep-3.mp3",
+    audioType: "audio/mpeg"
+  },
+
+  {
+    id: 20,
+    title: "DJ JOE MFALME 108 3-STEP MIX",
+    artist: "Jazzworld, Thukuthela",
+    image: "images/joe.jpg",
+    audioSrc: "music/Dj-Joe-Mfalme-Mixx-108-3-Step-Am.mp3",
+    audioType: "audio/mpeg"
+  },
+
+  {
+    id: 21,
+    title: "THE SOURCE BANGER MIX NAKURU",
+    artist: "Hit songs",
+    image: "images/mix.jpg",
+    audioSrc: "music/THE-SOURCE-EXPERIENCE-EDITION2-F.mp3",
+    audioType: "audio/mpeg"
+  },
+
+  {
+    id: 22,
+    title: "PARTY HANGOVER RIDDIM",
+    artist: "Vybz Kartel, Konshens, Demarco, Eshconinco",
+    image: "images/party.jpg",
+    audioSrc: "music/PARTY_HANGOVER_MIX_DJ_VSPIN_2024___DEMARCO___KONSHENS___VYBEZ___I-OCTANE___EXBOY.(256k).mp3",
+    audioType: "audio/mpeg"
+  },
+
+  {
+    id: 23,
+    title: "DJ FESTA TOP TIER GALORE 7",
+    artist: "DJ FESTA ",
+    image: "images/festa.jpg",
+    audioSrc: "music/DJ-FESTA-TOP-TIER-GALORE-7256k1.mp3",
+    audioType: "audio/mpeg"
+  },
+
+  {
+    id: 24,
+    title: "DJ F2 ANGUKA NAYO HOZAMBE MIX",
+    artist: "Wadagliz, Hozambe ",
+    image: "images/anguka.jpg",
+    audioSrc: "music/DJ-F2-ANGUKA-NAYO-ARBANTON-VIDEO.mp3",
+    audioType: "audio/mpeg"
+  },
+
+  {
+    id: 25,
+    title: "DJ LYTA BEST OF VYBZ KARTEL MIX",
+    artist: "Best of Vybz",
+    image: "images/vybz1.jpg",
+    audioSrc: "music/DJ-LYTA-THE-BEST-OF-VYBZ-KATREL.mp3",
+    audioType: "audio/mpeg"
+  },
+
+   {
+    id: 26,
+    title: "2026 KICKOFF DJ BROWNSKIN FT MC MIDO NEW YEARS PARTY",
+    artist: "Latest Hits",
+    image: "images/midobrownskin.jpg",
+    audioSrc: "music/2026-KICKOFF-VIDEO-MIX-CLUB-BANG.mp3",
+    audioType: "audio/mpeg"
+  },
+
+  {
+    id: 27,
+    title: "Diamond ft Fally Ipupa Inama",
+    artist: "Diamond",
+    videoSrc: "music/Diamond_Platnumz_Ft_Fally_Ipupa_-_Inama__Official_Video_(480p).mp4",
+    videoType: "video/mp4"
+  },
+  {
+    id: 28,
+    title: "Wakadinali Last dance",
+    artist: "Wakadinali",
+    videoSrc: "music/WAKADINALI_-__LAST_DANCE___Official_Music_Video_(480p).mp4",
+    videoType: "video/mp4"
+  },
+  {
+    id: 29,
+    title: "Vybz Kartel Party",
+    artist: "Vybz Kartel",
+    videoSrc: "music/Vybz_Kartel_-_Party(480p).mp4",
+    videoType: "video/mp4"
+  },
+
+  {
+    id: 30,
+    title: " BEST OF AFROBEAT MIX 2023",
+    artist: "Burna Boy, Rema, Omah Lay",
+    image: "images/afro.jpg",
+    audioSrc: "music/Afrobeat-Mix-BEST-OF-AFROBEAT-20.mp3",
+    audioType: "audio/mpeg"
+  },
+
+  {
+    id: 31,
+    title: "OLDSKOOL REGGAE RIDDIMS MIX",
+    artist: "Culture, Israel vibration, Bob Marley",
+    image: "images/root.jpg",
+    audioSrc: "music/OLDSCHOOL-REGGAE-RIDDIMS-COCOA-T.mp3",
+    audioType: "audio/mpeg"
+  },
+
+  {
+    id: 32,
+    title: "RHUMBA MIX 2025",
+    artist: "Fally Ipupa, Kofi",
+    image: "images/rhumba.jpg",
+    audioSrc: "music/RHUMBA-VIDEO-MIX-2025-RHUMBA-MIX.mp3",
+    audioType: "audio/mpeg"
+  },
+
+  {
+    id: 33,
+    title: "CLASSIC NOLSTAGIA RHUMBA LINGALA MIX",
+    artist: "Rhumba, Lingala Hits",
+    image: "images/rhumba1.jpg",
+    audioSrc: "music/CLASSIC-NOLSTAGIA-RHUMBA-LINGALA.mp3",
+    audioType: "audio/mpeg"
+  },
+
+  {
+    id: 34,
+    title: "LATEST AFROBEAT MIX 2025",
+    artist: "Ayra Starr, Burna Boy, Davido",
+    image: "images/afro1.jpg",
+    audioSrc: "music/LATEST-AFROBEAT-MIX-VIDEO-2025-V.mp3",
+    audioType: "audio/mpeg"
+  },
+
+  {
+    id: 35,
+    title: "NEW CLUB BANGERS MIX BY DJ MOON",
+    artist: "Shenseea, Vybz Kartel,Toxic Lyricali",
+    image: "images/moon.jpg",
+    audioSrc: "music/NEW-CLUB-BANGERS-PARTY-MIX-BY-DJ.mp3",
+    audioType: "audio/mpeg"
+  },
+  
+  {
+    id: 36,
+    title: "NEW-MIX-MC-MIDO-FT-ELIROSH-THE-D",
+    artist: "Latest hits",
+    image: "images/moon.jpg",
+    audioSrc: "music/NEW-MIX-MC-MIDO-FT-ELIROSH-THE-D.mp3",
+    audioType: "audio/mpeg"
+  }
+  
+  
+];
+
+  // ---------- GLOBALS ----------
+  let currentPage = 1;
+  const ITEMS_PER_PAGE = 4;
+  let filteredSongs = [...songsDatabase];
+  let searchTerm = "";
+
+  const musicGridContainer = document.getElementById("musicGrid");
+  const searchInput = document.getElementById("searchInput");
+  const paginationWrapper = document.getElementById("paginationControls");
+  const prevBtn = document.getElementById("prevPageBtn");
+  const nextBtn = document.getElementById("nextPageBtn");
+  const pageIndicator = document.getElementById("pageIndicator");
+
+  // ---------- PAUSE OTHER MEDIA ----------
+  function pauseAllOtherMedia(currentMedia) {
+    const allMedia = document.querySelectorAll('.song-media');
+
+    allMedia.forEach(media => {
+      if (media !== currentMedia && !media.paused) {
+        media.pause();
+      }
+    });
+  }
+
+  // ---------- ATTACH EVENTS ----------
+ // ---------- ATTACH EVENTS ----------
+function attachMediaEvents() {
+
+  const allMedia = document.querySelectorAll('.song-media');
+
+  allMedia.forEach(media => {
+
+    // SAVE CURRENT PLAYING MEDIA
+    media.addEventListener('play', function () {
+
+      pauseAllOtherMedia(this);
+
+      const sourceTag = this.querySelector("source");
+
+      if (sourceTag) {
+
+        localStorage.setItem(
+          "currentMediaSrc",
+          sourceTag.getAttribute("src")
+        );
+      }
+
+      localStorage.setItem(
+        "mediaWasPlaying",
+        "true"
+      );
+
+      // SAVE CURRENT TIME
+      this.addEventListener("timeupdate", () => {
+
+        localStorage.setItem(
+          "currentMediaTime",
+          this.currentTime
+        );
+      });
+    });
+
+    // SAVE WHEN PAUSED
+    media.addEventListener("pause", function () {
+
+      localStorage.setItem(
+        "mediaWasPlaying",
+        "false"
+      );
+    });
+  });
+
+  // PLAY BUTTONS
+  const playButtons =
+    document.querySelectorAll('.play-btn');
+
+  playButtons.forEach(btn => {
+
+    btn.addEventListener('click', function () {
+
+      const card =
+        this.closest('.music-card');
+
+      const media =
+        card.querySelector('.song-media');
+
+      if (media) {
+
+        pauseAllOtherMedia(media);
+
+        media.play().catch(() => {});
+      }
+    });
+  });
+}
+  // ---------- ESCAPE HTML ----------
+  function escapeHtml(str) {
+    if (!str) return "";
+
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    });
+  }
+
+  // ---------- RENDER CARDS ----------
+function renderCards(songsToDisplay) {
+
+  if (songsToDisplay.length === 0) {
+    musicGridContainer.innerHTML = `
+      <div class="no-result">
+        🎵 No matching tracks found.
+      </div>
+    `;
+    paginationWrapper.style.display = "none";
+    return;
+  }
+
+  let cardsHTML = "";
+
+  for (const song of songsToDisplay) {
+
+    cardsHTML += `
+      <div class="music-card">
+
+        ${
+          song.videoSrc
+          ? `
+            <video controls preload="metadata" class="song-media video-player">
+              <source src="${song.videoSrc}" type="${song.videoType}">
+            </video>
+
+            <div class="music-info">
+
+              <h3>${escapeHtml(song.title)}</h3>
+
+              <p class="artist">${escapeHtml(song.artist)}</p>
+
+              <button class="play-btn">
+                ▶ Play
+              </button>
+
+            </div>
+          `
+          : `
+            <img src="${song.image}" alt="${escapeHtml(song.title)}">
+
+            <div class="music-info">
+
+              <h3>${escapeHtml(song.title)}</h3>
+
+              <p class="artist">${escapeHtml(song.artist)}</p>
+
+              <audio controls preload="metadata" class="song-media">
+                <source src="${song.audioSrc}" type="${song.audioType}">
+              </audio>
+
+              <button class="play-btn">
+                ▶ Play
+              </button>
+
+            </div>
+          `
+        }
+
+      </div>
+    `;
+  }
+
+  musicGridContainer.innerHTML = cardsHTML;
+
+  attachMediaEvents();
+
+  restorePlayingMedia();
+}
+
+  // ---------- RESTORE PLAYING MEDIA ----------
+  function restorePlayingMedia() {
+
+  const savedSrc =
+    localStorage.getItem("currentMediaSrc");
+
+  const savedTime =
+    localStorage.getItem("currentMediaTime");
+
+  const wasPlaying =
+    localStorage.getItem("mediaWasPlaying");
+
+  if (!savedSrc) return;
+
+  setTimeout(() => {
+
+    const allMedia =
+      document.querySelectorAll(".song-media");
+
+    allMedia.forEach(media => {
+
+      const sourceTag =
+        media.querySelector("source");
+
+      if (!sourceTag) return;
+
+      const sourcePath =
+        sourceTag.getAttribute("src");
+
+      // MATCH EXACT FILE LOCATION
+      if (sourcePath === savedSrc ||
+          savedSrc.includes(sourcePath)) {
+
+        media.currentTime =
+          parseFloat(savedTime || 0);
+
+        if (wasPlaying === "true") {
+
+          media.play().catch(() => {});
+        }
+      }
+    });
+
+  }, 500);
+}
+
+  // ---------- PAGINATION ----------
+  function updatePaginationUI() {
+
+    const totalPages =
+      Math.ceil(filteredSongs.length / ITEMS_PER_PAGE);
+
+    if (totalPages <= 1) {
+      paginationWrapper.style.display = "none";
+      return;
+    }
+
+    paginationWrapper.style.display = "flex";
+
+    pageIndicator.innerText =
+      `Page ${currentPage} / ${totalPages}`;
+
+    prevBtn.disabled = currentPage === 1;
+    nextBtn.disabled = currentPage === totalPages;
+  }
+
+  // ---------- FILTER + PAGINATION ----------
+  function applyFilterAndPagination() {
+
+    if (!searchTerm.trim()) {
+
+      filteredSongs = [...songsDatabase];
+
+    } else {
+
+      const termLower = searchTerm.toLowerCase();
+
+      filteredSongs = songsDatabase.filter(song =>
+        song.title.toLowerCase().includes(termLower) ||
+        song.artist.toLowerCase().includes(termLower)
+      );
+    }
+
+    const totalPages =
+      Math.ceil(filteredSongs.length / ITEMS_PER_PAGE);
+
+    if (currentPage > totalPages)
+      currentPage = totalPages || 1;
+
+    const startIdx =
+      (currentPage - 1) * ITEMS_PER_PAGE;
+
+    const endIdx =
+      startIdx + ITEMS_PER_PAGE;
+
+    const pageSongs =
+      filteredSongs.slice(startIdx, endIdx);
+
+    renderCards(pageSongs);
+
+    updatePaginationUI();
+  }
+
+  // ---------- PAGINATION BUTTONS ----------
+  function saveCurrentPlayingMedia() {
+
+  const allMedia =
+    document.querySelectorAll(".song-media");
+
+  allMedia.forEach(media => {
+
+    if (!media.paused) {
+
+      const sourceTag =
+        media.querySelector("source");
+
+      if (sourceTag) {
+
+        localStorage.setItem(
+          "currentMediaSrc",
+          sourceTag.getAttribute("src")
+        );
+      }
+
+      localStorage.setItem(
+        "currentMediaTime",
+        media.currentTime
+      );
+
+      localStorage.setItem(
+        "mediaWasPlaying",
+        "true"
+      );
+    }
+  });
+}
+
+function goPrevPage() {
+
+  saveCurrentPlayingMedia();
+
+  if (currentPage > 1) {
+
+    currentPage--;
+
+    applyFilterAndPagination();
+  }
+}
+
+function goNextPage() {
+
+  saveCurrentPlayingMedia();
+
+  const totalPages =
+    Math.ceil(filteredSongs.length / ITEMS_PER_PAGE);
+
+  if (currentPage < totalPages) {
+
+    currentPage++;
+
+    applyFilterAndPagination();
+  }
+}
+
+  // ---------- INIT ----------
+  function init() {
+
+    applyFilterAndPagination();
+
+    searchInput.addEventListener("input", (e) => {
+      searchTerm = e.target.value;
+      currentPage = 1;
+      applyFilterAndPagination();
+    });
+
+    prevBtn.addEventListener("click", goPrevPage);
+    nextBtn.addEventListener("click", goNextPage);
+  }
+
+  init();
+
+  
+init();
+
+</script>
+
+
+<script type="module">
+
+import { ConvexHttpClient } from 
+"https://cdn.jsdelivr.net/npm/convex@1.17.4/browser/index.js";
+
+
+const client = new ConvexHttpClient(
+"https://YOUR-CONVEX-URL.convex.cloud"
+);
+
+
+async function loadSongs(){
+
+ const songs = await client.query(
+   "songs:getSongs"
+ );
+
+
+ songsDatabase.length = 0;
+
+
+ songs.forEach(song => {
+
+   songsDatabase.push({
+
+      id: song._id,
+
+      title: song.title,
+
+      artist: song.artist,
+
+      image: song.image,
+
+      audioSrc: song.audioUrl,
+
+      audioType:"audio/mpeg"
+
+   });
+
+ });
+
+
+ applyFilterAndPagination();
+
+}
+
+
+loadSongs();
+
+
+</script>
+
+
+</body>
+</html>
+</body>
+</html>
